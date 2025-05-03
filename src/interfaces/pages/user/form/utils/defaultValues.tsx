@@ -5,4 +5,5 @@ export const generateDefaultValues = (editUser?: IFormProps['editUser']) => ({
 	name: editUser?.name || '',
 	email: editUser?.email || '',
 	password: '',
+	type: editUser?.type || 'STUDENT',
 });

@@ -7,6 +7,7 @@ import {
 	Card,
 	IconButton,
 	InputAdornment,
+	MenuItem,
 	Stack,
 	Typography,
 } from '@mui/material';
@@ -17,7 +18,11 @@ import { useForm } from 'react-hook-form';
 import { Routes } from '../../../../app/routes';
 import { useUserRepository } from '../../../../infrastructure/repositories/user';
 import { randomPassword } from '../../../../infrastructure/utils/randomPassword';
-import { FormProvider, RHFTextField } from '../../../components/hookForm';
+import {
+	FormProvider,
+	RHFSelect,
+	RHFTextField,
+} from '../../../components/hookForm';
 import { Icon } from '../../../components/icon';
 import { useBoolean } from '../../../hooks/useBoolean';
 import { IStateForm } from './types/defaultStateForm';
@@ -113,6 +118,10 @@ export const UserForm = ({ editUser }: IFormProps) => {
 						>
 							<RHFTextField name='name' label='Nome completo' />
 							<RHFTextField name='email' label='Email' />
+							<RHFSelect name='type' label='Tipo de usuário'>
+								<MenuItem value='ADMIN'>Administrador</MenuItem>
+								<MenuItem value='STUDENT'>Aluno</MenuItem>
+							</RHFSelect>
 							<RHFTextField
 								name='password'
 								label={

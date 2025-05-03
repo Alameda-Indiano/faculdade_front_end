@@ -4,6 +4,7 @@ import {
 	TableCell,
 	TableRow as TableRowDefault,
 	Tooltip,
+	Typography,
 	Zoom,
 } from '@mui/material';
 import { ConfirmDialog } from '../../../../../components/confirmDialog';
@@ -59,15 +60,39 @@ export const TableRow = ({
 			<TableCell sx={{ whiteSpace: 'nowrap' }}>
 				{row?.user?.name || notFound}
 			</TableCell>
+
+			<Typography variant='body2' gutterBottom>
+				{typeof row?.cost === 'number'
+					? `R$ ${row?.cost.toFixed(2)}`
+					: 'Não informado'}
+			</Typography>
+
 			<TableCell sx={{ whiteSpace: 'nowrap' }}>
-				{row?.cost || notFound}
+				{row?.recorrency
+					? `${
+							{
+								MONTHLY: 'MENSAL',
+								QUARTERLY: 'TRIMESTRAL',
+								YEARLY: 'ANUAL',
+							}[
+								//@ts-ignore
+								row.recorrency
+							]
+						}`
+					: 'Não informado'}
 			</TableCell>
-			<TableCell sx={{ whiteSpace: 'nowrap' }}>
-				{row?.recorrency || notFound}
-			</TableCell>
-			<TableCell sx={{ whiteSpace: 'nowrap' }}>
-				{row?.status || notFound}
-			</TableCell>
+
+			<Typography sx={{ whiteSpace: 'nowrap' }}>
+				{
+					{
+						ACTIVE: 'Ativo',
+						INACTIVE: 'Inativo',
+					}[
+						//@ts-ignore
+						row.status
+					]
+				}
+			</Typography>
 
 			<TableCell sx={{ whiteSpace: 'nowrap' }}>
 				{(row?.created_at &&

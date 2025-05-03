@@ -4,6 +4,7 @@ import {
 	TableCell,
 	TableRow as TableRowDefault,
 	Tooltip,
+	Typography,
 	Zoom,
 } from '@mui/material';
 import { ConfirmDialog } from '../../../../../components/confirmDialog';
@@ -62,7 +63,11 @@ export const TableRow = ({
 			</TableCell>
 
 			<TableCell sx={{ whiteSpace: 'nowrap' }}>
-				{row?.cost || notFound}
+				<Typography variant='body2' gutterBottom>
+					{typeof row?.cost === 'number'
+						? `R$ ${row?.cost.toFixed(2)}`
+						: 'Não informado'}
+				</Typography>
 			</TableCell>
 
 			<TableCell sx={{ whiteSpace: 'nowrap' }}>

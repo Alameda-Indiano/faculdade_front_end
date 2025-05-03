@@ -1,7 +1,7 @@
 'use client';
 
-import { UserForm } from '../../../../interfaces/pages/user';
+import { ClassForm } from '../../../../interfaces/pages/class';
 
-export default function UserPage() {
-	return <UserForm />;
+export default function ClassPage() {
+	return <ClassForm />;
 }

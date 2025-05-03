@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { metadataUser } from '../../../interfaces/pages/user/metadata';
+import { metadataBodyMeasurement } from '../../../interfaces/pages/bodyMeasurement/metadata';
 
-export const metadata: Metadata = metadataUser;
+export const metadata: Metadata = metadataBodyMeasurement;
 
-export default function UserLayout({
+export default function BodyMeasurementLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;

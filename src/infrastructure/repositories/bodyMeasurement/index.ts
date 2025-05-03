@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
 import { IUserRepository } from '../../../domain/repositories/IUser.repo';
 import { IRepositorysType } from '../../../types/IRepositorys';
-import { httpUserRepository } from './httpBodyMeasurementRepository';
-import { mockUserRepository } from './mockBodyMeasurementRepository';
+import { httpBodyMeasurementRepository } from './httpBodyMeasurementRepository';
+import { mockBodyMeasurementRepository } from './mockBodyMeasurementRepository';
 
-export const useUserRepository = (type?: IRepositorysType): IUserRepository => {
+export const useBodyMeasurementRepository = (
+	type?: IRepositorysType,
+): IUserRepository => {
 	const repositoryType =
 		type ||
 		(process.env.NEXT_PUBLIC_DEFAULT_REPO_TYPE as IRepositorysType) ||
@@ -13,9 +15,9 @@ export const useUserRepository = (type?: IRepositorysType): IUserRepository => {
 	const repository = useMemo(() => {
 		switch (repositoryType) {
 			case 'mock':
-				return mockUserRepository;
+				return mockBodyMeasurementRepository;
 			case 'http':
-				return httpUserRepository;
+				return httpBodyMeasurementRepository;
 			default:
 				throw new Error(`Unknown repository type: ${repositoryType}`);
 		}

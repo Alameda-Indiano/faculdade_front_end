@@ -23,7 +23,7 @@ export const TableRow = ({
 
 	const popover = usePopover();
 
-	const isOpenDialogDeleteClass = useBoolean();
+	const isOpenDialogDeleteBodyMeasurement = useBoolean();
 	const isLoading = useBoolean(false);
 
 	const handleEditRow = () => {
@@ -81,7 +81,7 @@ export const TableRow = ({
 			>
 				<MenuItem
 					onClick={() => {
-						isOpenDialogDeleteClass.onTrue();
+						isOpenDialogDeleteBodyMeasurement.onTrue();
 						popover.onClose();
 					}}
 					sx={{ color: 'error.main' }}
@@ -102,14 +102,14 @@ export const TableRow = ({
 			</CustomPopover>
 
 			<ConfirmDialog
-				open={isOpenDialogDeleteClass.value}
-				onClose={isOpenDialogDeleteClass.onFalse}
-				title='Excluir Classe de Aula'
+				open={isOpenDialogDeleteBodyMeasurement.value}
+				onClose={isOpenDialogDeleteBodyMeasurement.onFalse}
+				title='Excluir BodyMeasuremente de Aula'
 				content={
 					<>
 						<p>
-							Tem certeza que você deseja excluir a classe de
-							aula:
+							Tem certeza que você deseja excluir a
+							bodyMeasuremente de aula:
 						</p>
 						<li>
 							<strong>{row?.name}</strong>

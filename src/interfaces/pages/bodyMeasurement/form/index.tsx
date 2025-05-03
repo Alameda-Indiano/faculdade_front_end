@@ -7,7 +7,6 @@ import {
 	Card,
 	IconButton,
 	InputAdornment,
-	MenuItem,
 	Stack,
 	Typography,
 } from '@mui/material';
@@ -16,33 +15,29 @@ import { enqueueSnackbar } from 'notistack';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { Routes } from '../../../../app/routes';
-import { useUserRepository } from '../../../../infrastructure/repositories/user';
+import { useBodyMeasurementRepository } from '../../../../infrastructure/repositories/bodyMeasurement';
 import { randomPassword } from '../../../../infrastructure/utils/randomPassword';
-import {
-	FormProvider,
-	RHFSelect,
-	RHFTextField,
-} from '../../../components/hookForm';
+import { FormProvider, RHFTextField } from '../../../components/hookForm';
 import { Icon } from '../../../components/icon';
 import { useBoolean } from '../../../hooks/useBoolean';
 import { IStateForm } from './types/defaultStateForm';
 import { IFormProps } from './types/formProps';
 import { generateDefaultValues } from './utils/defaultValues';
-import { UserSchema } from './validators/schema';
+import { BodyMeasurementSchema } from './validators/schema';
 
-export const UserForm = ({ editUser }: IFormProps) => {
+export const BodyMeasurementForm = ({ editBodyMeasurement }: IFormProps) => {
 	const router = useRouter();
 	const isEditMod = useBoolean(false);
 
-	const userRepository = useUserRepository();
+	const bodyMeasurementRepository = useBodyMeasurementRepository();
 
 	const defaultValues = useMemo(
-		() => generateDefaultValues(editUser),
-		[editUser],
+		() => generateDefaultValues(editBodyMeasurement),
+		[editBodyMeasurement],
 	);
 
 	const formContext = useForm({
-		resolver: yupResolver(UserSchema(isEditMod.value)),
+		resolver: yupResolver(BodyMeasurementSchema(isEditMod.value)),
 		defaultValues,
 	});
 
@@ -52,23 +47,23 @@ export const UserForm = ({ editUser }: IFormProps) => {
 	};
 
 	useEffect(() => {
-		if (editUser?.id) isEditMod.onTrue();
-	}, [editUser]);
+		if (editBodyMeasurement?.id) isEditMod.onTrue();
+	}, [editBodyMeasurement]);
 
 	const onSubmit = async ({ id, ...data }: IStateForm) => {
 		try {
 			let response = {};
 
 			if (isEditMod.value)
-				response = await userRepository.update({
+				response = await bodyMeasurementRepository.update({
 					id,
 					...data,
 				});
-			else response = await userRepository.create(data);
+			else response = await bodyMeasurementRepository.create(data);
 
 			if (response) {
 				enqueueSnackbar('Usuário cadastrado com Sucesso!');
-				router.push(Routes.user);
+				router.push(Routes.bodyMeasurement);
 			} else
 				enqueueSnackbar(
 					isEditMod.value
@@ -118,10 +113,6 @@ export const UserForm = ({ editUser }: IFormProps) => {
 						>
 							<RHFTextField name='name' label='Nome completo' />
 							<RHFTextField name='email' label='Email' />
-							<RHFSelect name='type' label='Tipo de usuário'>
-								<MenuItem value='ADMIN'>Administrador</MenuItem>
-								<MenuItem value='STUDENT'>Aluno</MenuItem>
-							</RHFSelect>
 							<RHFTextField
 								name='password'
 								label={

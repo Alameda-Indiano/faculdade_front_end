@@ -12,7 +12,7 @@ export const TableToolbar = ({ filters, onFilters }: ITableToolbarProps) => {
 
 	const handleCreate = () => {
 		isLoading.onTrue();
-		router.replace(Routes.userCreate);
+		router.replace(Routes.bodyMeasurementCreate);
 	};
 
 	return (

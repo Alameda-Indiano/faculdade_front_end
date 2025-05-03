@@ -6,7 +6,7 @@ import { enqueueSnackbar } from 'notistack';
 import { useCallback, useEffect, useState } from 'react';
 
 import { Routes } from '../../../../app/routes';
-import { IClassEntity } from '../../../../domain/entities/IClassEntity';
+import { IClasseEntity } from '../../../../domain/entities/IClasseEntity';
 import { useClassRepository } from '../../../../infrastructure/repositories/class';
 import { GridLoading } from '../../../components/gridLoading';
 import { TableHead, useTable } from '../../../components/table';
@@ -30,7 +30,7 @@ export const ClassGrid = () => {
 
 	const classRepository = useClassRepository();
 
-	const [tableData, setTableData] = useState<IClassEntity[]>([]);
+	const [tableData, setTableData] = useState<IClasseEntity[]>([]);
 
 	const { filters, onFilters } = useFilters<IClassFilters>({
 		initialFilters: {

@@ -1,7 +1,7 @@
 'use client';
 
-import { UserForm } from '../../../../interfaces/pages/user';
+import { BodyMeasurementForm } from '../../../../interfaces/pages/bodyMeasurement';
 
-export default function UserPage() {
-	return <UserForm />;
+export default function BodyMeasurementPage() {
+	return <BodyMeasurementForm />;
 }

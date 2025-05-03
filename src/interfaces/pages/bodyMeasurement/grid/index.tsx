@@ -6,8 +6,8 @@ import { enqueueSnackbar } from 'notistack';
 import { useCallback, useEffect, useState } from 'react';
 
 import { Routes } from '../../../../app/routes';
-import { IUserEntity } from '../../../../domain/entities/IUserEntity';
-import { useUserRepository } from '../../../../infrastructure/repositories/user';
+import { IBodyMeasurementEntity } from '../../../../domain/entities/IBodyMeasurementEntity';
+import { useBodyMeasurementRepository } from '../../../../infrastructure/repositories/bodyMeasurement';
 import { GridLoading } from '../../../components/gridLoading';
 import { TableHead, useTable } from '../../../components/table';
 import { useBoolean } from '../../../hooks/useBoolean';
@@ -15,10 +15,10 @@ import { useDebounce } from '../../../hooks/useDebounce';
 import { useFilters } from '../../../hooks/useFilters';
 import { TableRow } from './components/tableRow';
 import { TableToolbar } from './components/tableToolbar';
-import { IUserFilters } from './interfaces';
+import { IBodyMeasurementFilters } from './interfaces';
 import { TABLE_HEAD } from './mock/tableHeader';
 
-export const UserGrid = () => {
+export const BodyMeasurementGrid = () => {
 	const table = useTable({
 		defaultRowsPerPage: 10,
 	});
@@ -28,11 +28,11 @@ export const UserGrid = () => {
 	const isLoading = useBoolean(false);
 	const router = useRouter();
 
-	const userRepository = useUserRepository();
+	const bodyMeasurementRepository = useBodyMeasurementRepository();
 
-	const [tableData, setTableData] = useState<IUserEntity[]>([]);
+	const [tableData, setTableData] = useState<IBodyMeasurementEntity[]>([]);
 
-	const { filters, onFilters } = useFilters<IUserFilters>({
+	const { filters, onFilters } = useFilters<IBodyMeasurementFilters>({
 		initialFilters: {
 			search: '',
 		},
@@ -50,9 +50,11 @@ export const UserGrid = () => {
 		isLoading.onTrue();
 
 		try {
-			const dataUser = await userRepository.getAll(debouncedSearch);
+			const dataBodyMeasurement =
+				await bodyMeasurementRepository.getAll(debouncedSearch);
 
-			if (dataUser.success) setTableData(dataUser.data || []);
+			if (dataBodyMeasurement.success)
+				setTableData(dataBodyMeasurement.data || []);
 			else
 				enqueueSnackbar('Estabelecimento Não Encontrado', {
 					variant: 'error',
@@ -65,13 +67,15 @@ export const UserGrid = () => {
 		isLoading.onFalse();
 	};
 
-	const queryDeleteUser = async (itemsSelectedDeletion: Array<string>) => {
+	const queryDeleteBodyMeasurement = async (
+		itemsSelectedDeletion: Array<string>,
+	) => {
 		const results: any[] = [];
 
 		await itemsSelectedDeletion.reduce(async (previousPromise, id) => {
 			await previousPromise;
 			try {
-				const data = await userRepository.delete(id);
+				const data = await bodyMeasurementRepository.delete(id);
 				results.push(data);
 			} catch (error) {
 				console.error(error);
@@ -89,7 +93,7 @@ export const UserGrid = () => {
 
 	const handleDeleteRow = useCallback(
 		async (id: string) => {
-			await queryDeleteUser([id]);
+			await queryDeleteBodyMeasurement([id]);
 			setTableData(tableData.filter((row) => row.id !== id));
 			table.onUpdatePageDeleteRow(dataInPage.length);
 		},
@@ -98,7 +102,7 @@ export const UserGrid = () => {
 
 	const handleEditRow = useCallback(
 		(id: string) => {
-			router.push(Routes.userEdit(id));
+			router.push(Routes.bodyMeasurementEdit(id));
 		},
 		[router],
 	);

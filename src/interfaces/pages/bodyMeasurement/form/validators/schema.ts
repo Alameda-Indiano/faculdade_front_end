@@ -1,44 +1,37 @@
 import * as Yup from 'yup';
 
-export const UserSchema = (isFormEdit: boolean) =>
+export const BodyMeasurementSchema = (isFormEdit: boolean) =>
 	Yup.object().shape({
 		id: isFormEdit
 			? Yup.string().required('É necessário informar o ID para edição')
-			: Yup.string().notRequired(),
+			: Yup.string(),
 
-		name: Yup.string()
-			.required('Informe o nome do usuário')
-			.min(3, 'O nome deve ter no mínimo 3 caracteres')
-			.max(100, 'O nome pode ter no máximo 100 caracteres'),
+		name: Yup.string().required('Informe o nome do usuário'),
 
 		email: Yup.string()
 			.email('Informe um e-mail válido')
 			.required('Informe o e-mail do usuário'),
 
-		type: Yup.mixed<'STUDENT' | 'ADMIN'>()
-			.oneOf(['STUDENT', 'ADMIN'], 'Tipo de usuário inválido')
-			.required('Informe o tipo de usuário'),
-
 		password: isFormEdit
-			? Yup.string().notRequired()
+			? Yup.string()
 			: Yup.string()
 				.required('Informe a senha do usuário')
 				.min(10, 'A senha deve conter no mínimo 10 caracteres')
 				.max(16, 'A senha deve conter no máximo 16 caracteres')
 				.matches(
-					/(?:.*[A-Z]){2,}/,
+					/[A-Z].*[A-Z]/,
 					'A senha deve conter ao menos 2 letras maiúsculas',
 				)
 				.matches(
-					/(?:.*[a-z]){3,}/,
+					/[a-z].*[a-z].*[a-z]/,
 					'A senha deve conter ao menos 3 letras minúsculas',
 				)
 				.matches(
-					/(?:.*[0-9]){2,}/,
+					/[0-9].*[0-9]/,
 					'A senha deve conter ao menos 2 números',
 				)
 				.matches(
 					/[@#$%&]/,
-					'A senha deve conter ao menos 1 caractere especial: @ # $ % &',
+					'A senha deve conter ao menos 1 caractere especial: @#$%&',
 				),
 	});

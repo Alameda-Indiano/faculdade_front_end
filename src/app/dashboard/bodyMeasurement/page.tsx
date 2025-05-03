@@ -1,7 +1,7 @@
 'use client';
 
-import { UserGrid } from '../../../interfaces/pages/user';
+import { BodyMeasurementGrid } from '../../../interfaces/pages/bodyMeasurement';
 
 export default function AuthPage() {
-	return <UserGrid />;
+	return <BodyMeasurementGrid />;
 }

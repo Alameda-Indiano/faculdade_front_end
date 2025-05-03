@@ -1,7 +1,7 @@
 import { IMetadata } from '../../../types/IMetadata';
 
 export const metadataClass: IMetadata = {
-	title: 'Estabelecimentos',
-	description: 'Configuração de Estabelecimentos do Sistema',
+	title: 'Classes de Aulas',
+	description: 'Configuração de Classes de Aulas do Sistema',
 	robots: 'noindex, nofollow',
 };

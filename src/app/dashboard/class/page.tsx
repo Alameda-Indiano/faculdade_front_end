@@ -1,7 +1,7 @@
 'use client';
 
-import { UserGrid } from '../../../interfaces/pages/user';
+import { ClassGrid } from '../../../interfaces/pages/class';
 
-export default function AuthPage() {
-	return <UserGrid />;
+export default function ClassPage() {
+	return <ClassGrid />;
 }

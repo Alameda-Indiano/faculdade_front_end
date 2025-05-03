@@ -1,30 +1,36 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { IUserEntity } from '../../../../domain/entities/IUserEntity';
-import { useUserRepository } from '../../../../infrastructure/repositories/user';
-import { UserForm } from '../../../../interfaces/pages/user/form';
-import { IFormPageProps } from '../../../../interfaces/pages/user/form/types/IFormPageProps';
+import { IBodyMeasurementEntity } from '../../../../domain/entities/IBodyMeasurementEntity';
+import { useBodyMeasurementRepository } from '../../../../infrastructure/repositories/bodyMeasurement';
+import { BodyMeasurementForm } from '../../../../interfaces/pages/bodyMeasurement/form';
+import { IFormPageProps } from '../../../../interfaces/pages/bodyMeasurement/form/types/IFormPageProps';
 import Loading from '../../../loading';
 
-export default function UserEditPage({ params }: IFormPageProps) {
-	const { userId } = params;
-	const userRepository = useUserRepository();
+export default function BodyMeasurementEditPage({ params }: IFormPageProps) {
+	const { bodyMeasurementId } = params;
+	const bodyMeasurementRepository = useBodyMeasurementRepository();
 
-	const [editUser, setEditUser] = useState<IUserEntity | undefined>(
-		undefined,
-	);
+	const [editBodyMeasurement, setEditBodyMeasurement] = useState<
+		IBodyMeasurementEntity | undefined
+	>(undefined);
 
 	const getDataPage = async () => {
-		const response = await userRepository.getById(userId!);
+		const response = await bodyMeasurementRepository.getById(
+			bodyMeasurementId!,
+		);
 
-		if (response.success) setEditUser(response.data);
-		else setEditUser(undefined);
+		if (response.success) setEditBodyMeasurement(response.data);
+		else setEditBodyMeasurement(undefined);
 	};
 
 	useEffect(() => {
 		getDataPage();
 	}, []);
 
-	return editUser ? <UserForm editUser={editUser} /> : <Loading />;
+	return editBodyMeasurement ? (
+		<BodyMeasurementForm editBodyMeasurement={editBodyMeasurement} />
+	) : (
+		<Loading />
+	);
 }

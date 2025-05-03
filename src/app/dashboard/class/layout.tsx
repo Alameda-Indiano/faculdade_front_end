@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { metadataUser } from '../../../interfaces/pages/user/metadata';
+import { metadataClass } from '../../../interfaces/pages/class/metadata';
 
-export const metadata: Metadata = metadataUser;
+export const metadata: Metadata = metadataClass;
 
-export default function UserLayout({
+export default function ClassLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;

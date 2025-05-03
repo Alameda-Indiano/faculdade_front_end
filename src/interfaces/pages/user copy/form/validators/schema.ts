@@ -19,11 +19,6 @@ export const UserSchema = (isFormEdit: boolean) =>
 			.oneOf(['STUDENT', 'ADMIN'], 'Tipo de usuário inválido')
 			.required('Informe o tipo de usuário'),
 
-		classes: Yup.array()
-			.of(Yup.string().required())
-			.min(1, 'Selecione ao menos uma classe de aula')
-			.required('Selecione ao menos uma classe de aula'),
-
 		password: isFormEdit
 			? Yup.string().notRequired()
 			: Yup.string()

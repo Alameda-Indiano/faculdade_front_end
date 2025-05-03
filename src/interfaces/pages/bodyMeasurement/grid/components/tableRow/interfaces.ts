@@ -1,10 +1,10 @@
-import { IBodyMeasurementeEntity } from '../../../../../../domain/entities/IBodyMeasurementeEntity';
+import { IBodyMeasurementEntity } from '../../../../../../domain/entities/IBodyMeasurementEntity';
 import { IBodyMeasurementFilters } from '../../interfaces';
 
 export interface ITableRowProps {
 	selected: boolean;
 	onEditRow: VoidFunction;
-	row?: IBodyMeasurementeEntity;
+	row?: IBodyMeasurementEntity;
 	onSelectRow: VoidFunction;
 	filters: IBodyMeasurementFilters;
 	onDeleteRow: VoidFunction;

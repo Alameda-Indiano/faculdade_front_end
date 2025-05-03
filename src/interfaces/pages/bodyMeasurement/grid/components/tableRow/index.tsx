@@ -6,6 +6,7 @@ import {
 	Tooltip,
 	Zoom,
 } from '@mui/material';
+import { format } from 'date-fns';
 import { ConfirmDialog } from '../../../../../components/confirmDialog';
 import CustomPopover from '../../../../../components/customPopover';
 import { Iconify } from '../../../../../components/iconify';
@@ -22,8 +23,7 @@ export const TableRow = ({
 	const notFound = 'Não informado';
 
 	const popover = usePopover();
-
-	const isOpenDialogDeleteBodyMeasurement = useBoolean();
+	const isOpenDialogDelete = useBoolean();
 	const isLoading = useBoolean(false);
 
 	const handleEditRow = () => {
@@ -36,42 +36,36 @@ export const TableRow = ({
 		onDeleteRow();
 	};
 
+	const formatDate = (date?: string) =>
+		date ? format(new Date(date), 'dd/MM/yyyy HH:mm') : notFound;
+
 	return (
 		<TableRowDefault hover selected={selected}>
-			{!!row && row?.id && (
-				<TableCell align='right' sx={{ px: 1, whiteSpace: 'nowrap' }}>
-					<Tooltip
-						TransitionComponent={Zoom}
-						TransitionProps={{ timeout: 300 }}
-						arrow
-						disableInteractive
-						title='Mais Opções'
+			<TableCell align='right' sx={{ px: 1, whiteSpace: 'nowrap' }}>
+				<Tooltip
+					TransitionComponent={Zoom}
+					TransitionProps={{ timeout: 300 }}
+					arrow
+					disableInteractive
+					title='Mais Opções'
+				>
+					<LoadingButton
+						loading={isLoading.value}
+						onClick={popover.onOpen}
 					>
-						<LoadingButton
-							loading={isLoading.value}
-							onClick={popover.onOpen}
-						>
-							<Iconify icon='eva:more-vertical-fill' />
-						</LoadingButton>
-					</Tooltip>
-				</TableCell>
-			)}
-
-			<TableCell sx={{ whiteSpace: 'nowrap' }}>
-				{row?.name || notFound}
+						<Iconify icon='eva:more-vertical-fill' />
+					</LoadingButton>
+				</Tooltip>
 			</TableCell>
 
-			<TableCell sx={{ whiteSpace: 'nowrap' }}>
-				{row?.maximum || notFound}
-			</TableCell>
-
-			<TableCell sx={{ whiteSpace: 'nowrap' }}>
-				{row?.created_at || notFound}
-			</TableCell>
-
-			<TableCell sx={{ whiteSpace: 'nowrap' }}>
-				{row?.updated_at || notFound}
-			</TableCell>
+			<TableCell>{row?.user?.name ?? notFound}</TableCell>
+			<TableCell>{row?.weight ?? notFound}</TableCell>
+			<TableCell>{row?.waist ?? notFound}</TableCell>
+			<TableCell>{row?.hip ?? notFound}</TableCell>
+			<TableCell>{row?.body_fat ?? notFound}</TableCell>
+			<TableCell>{row?.bmi ?? notFound}</TableCell>
+			<TableCell>{formatDate(row?.created_at)}</TableCell>
+			<TableCell>{formatDate(row?.updated_at)}</TableCell>
 
 			<CustomPopover
 				open={popover.open}
@@ -81,7 +75,7 @@ export const TableRow = ({
 			>
 				<MenuItem
 					onClick={() => {
-						isOpenDialogDeleteBodyMeasurement.onTrue();
+						isOpenDialogDelete.onTrue();
 						popover.onClose();
 					}}
 					sx={{ color: 'error.main' }}
@@ -102,17 +96,14 @@ export const TableRow = ({
 			</CustomPopover>
 
 			<ConfirmDialog
-				open={isOpenDialogDeleteBodyMeasurement.value}
-				onClose={isOpenDialogDeleteBodyMeasurement.onFalse}
-				title='Excluir BodyMeasuremente de Aula'
+				open={isOpenDialogDelete.value}
+				onClose={isOpenDialogDelete.onFalse}
+				title='Excluir Medida Corporal'
 				content={
 					<>
-						<p>
-							Tem certeza que você deseja excluir a
-							bodyMeasuremente de aula:
-						</p>
+						<p>Tem certeza que deseja excluir a medição?</p>
 						<li>
-							<strong>{row?.name}</strong>
+							ID: <strong>{row?.id || 'Sem ID'}</strong>
 						</li>
 					</>
 				}

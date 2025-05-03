@@ -2,23 +2,20 @@
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import {
-	Box,
-	Card,
-	IconButton,
-	InputAdornment,
-	Stack,
-	Typography,
-} from '@mui/material';
+import { Box, Card, MenuItem, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { enqueueSnackbar } from 'notistack';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Routes } from '../../../../app/routes';
+import { IUserEntity } from '../../../../domain/entities/IUserEntity';
 import { useBodyMeasurementRepository } from '../../../../infrastructure/repositories/bodyMeasurement';
-import { randomPassword } from '../../../../infrastructure/utils/randomPassword';
-import { FormProvider, RHFTextField } from '../../../components/hookForm';
-import { Icon } from '../../../components/icon';
+import { useUserRepository } from '../../../../infrastructure/repositories/user';
+import {
+	FormProvider,
+	RHFSelect,
+	RHFTextField,
+} from '../../../components/hookForm';
 import { useBoolean } from '../../../hooks/useBoolean';
 import { IStateForm } from './types/defaultStateForm';
 import { IFormProps } from './types/formProps';
@@ -30,6 +27,9 @@ export const BodyMeasurementForm = ({ editBodyMeasurement }: IFormProps) => {
 	const isEditMod = useBoolean(false);
 
 	const bodyMeasurementRepository = useBodyMeasurementRepository();
+	const userRepository = useUserRepository();
+
+	const [users, setUsers] = useState<IUserEntity[]>([]);
 
 	const defaultValues = useMemo(
 		() => generateDefaultValues(editBodyMeasurement),
@@ -41,10 +41,22 @@ export const BodyMeasurementForm = ({ editBodyMeasurement }: IFormProps) => {
 		defaultValues,
 	});
 
-	const generateRandomPassword = () => {
-		const password = randomPassword();
-		formContext.setValue('password', password);
-	};
+	const { watch, setValue } = formContext;
+
+	const weight = watch('weight');
+	const height = watch('height');
+
+	useEffect(() => {
+		const w = typeof weight === 'string' ? parseFloat(weight) : weight;
+		const h = typeof height === 'string' ? parseFloat(height) : height;
+
+		if (!isNaN(w) && !isNaN(h) && h > 0) {
+			const calculatedBmi = w / (h * h);
+			setValue('bmi', parseFloat(calculatedBmi.toFixed(2)), {
+				shouldValidate: true,
+			});
+		}
+	}, [weight, height, setValue]);
 
 	useEffect(() => {
 		if (editBodyMeasurement?.id) isEditMod.onTrue();
@@ -62,26 +74,47 @@ export const BodyMeasurementForm = ({ editBodyMeasurement }: IFormProps) => {
 			else response = await bodyMeasurementRepository.create(data);
 
 			if (response) {
-				enqueueSnackbar('Usuário cadastrado com Sucesso!');
+				enqueueSnackbar('Medida corporal salva com sucesso!');
 				router.push(Routes.bodyMeasurement);
-			} else
+			} else {
 				enqueueSnackbar(
 					isEditMod.value
-						? 'Erro ao editar o Usuário!'
-						: 'Erro ao cadastrar o Usuário!',
+						? 'Erro ao editar a medida corporal!'
+						: 'Erro ao cadastrar a medida corporal!',
 					{ variant: 'error' },
 				);
+			}
 		} catch (error) {
 			console.log(error);
 			enqueueSnackbar('Erro interno da aplicação!', { variant: 'error' });
 		}
 	};
 
+	const getUsers = async () => {
+		try {
+			const response = await userRepository.getAll();
+
+			if (response.success) {
+				setUsers(response.data || []);
+			} else {
+				enqueueSnackbar('Usuário não encontrado', {
+					variant: 'error',
+				});
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	useEffect(() => {
+		getUsers();
+	}, []);
+
 	return (
 		<Box sx={{ width: '90%', minWidth: '350px', p: 5 }}>
 			<FormProvider
 				methods={formContext}
-				onSubmit={formContext.handleSubmit((data) => onSubmit(data))}
+				onSubmit={formContext.handleSubmit(onSubmit)}
 			>
 				<Card sx={{ p: 3 }}>
 					<Box sx={{ pb: 5 }}>
@@ -89,8 +122,8 @@ export const BodyMeasurementForm = ({ editBodyMeasurement }: IFormProps) => {
 							sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}
 						>
 							{isEditMod.value
-								? 'Edição de Usuários'
-								: 'Cadastro de Usuários'}
+								? 'Edição de Medidas'
+								: 'Cadastro de Medidas'}
 						</Typography>
 					</Box>
 					<Box
@@ -111,32 +144,44 @@ export const BodyMeasurementForm = ({ editBodyMeasurement }: IFormProps) => {
 								sm: 'repeat(2, 1fr)',
 							}}
 						>
-							<RHFTextField name='name' label='Nome completo' />
-							<RHFTextField name='email' label='Email' />
 							<RHFTextField
-								name='password'
-								label={
-									isEditMod.value ? 'Editar Senha' : 'Senha'
-								}
-								InputProps={{
-									endAdornment: (
-										<InputAdornment position='end'>
-											<IconButton
-												onClick={generateRandomPassword}
-												edge='end'
-											>
-												<Icon
-													icon='sync'
-													type='regular'
-													color='inherit'
-													size='1.25x'
-													cursor='pointer'
-												/>
-											</IconButton>
-										</InputAdornment>
-									),
-								}}
+								name='weight'
+								label='Peso (kg)'
+								type='number'
 							/>
+							<RHFTextField
+								name='height'
+								label='Altura (m)'
+								type='number'
+							/>
+							<RHFTextField
+								name='waist'
+								label='Cintura (cm)'
+								type='number'
+							/>
+							<RHFTextField
+								name='hip'
+								label='Quadril (cm)'
+								type='number'
+							/>
+							<RHFTextField
+								name='body_fat'
+								label='% Gordura Corporal'
+								type='number'
+							/>
+							<RHFTextField
+								name='bmi'
+								label='IMC'
+								type='number'
+								disabled
+							/>
+							<RHFSelect name='user_id' label='Usuário'>
+								{users.map((user) => (
+									<MenuItem key={user.id} value={user.id}>
+										{user.name}
+									</MenuItem>
+								))}
+							</RHFSelect>
 						</Stack>
 						<Stack
 							sx={{
@@ -153,7 +198,7 @@ export const BodyMeasurementForm = ({ editBodyMeasurement }: IFormProps) => {
 							>
 								{isEditMod.value
 									? 'Salvar Alterações'
-									: 'Cadastrar Usuário'}
+									: 'Cadastrar Medidas'}
 							</LoadingButton>
 						</Stack>
 					</Box>

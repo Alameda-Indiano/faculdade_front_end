@@ -4,34 +4,45 @@ export const BodyMeasurementSchema = (isFormEdit: boolean) =>
 	Yup.object().shape({
 		id: isFormEdit
 			? Yup.string().required('É necessário informar o ID para edição')
-			: Yup.string(),
+			: Yup.string().notRequired(),
 
-		name: Yup.string().required('Informe o nome do usuário'),
+		height: Yup.number()
+			.typeError('Informe um valor numérico')
+			.required('Informe a altura')
+			.min(1.3, 'Altura mínima é 1.30m')
+			.max(2.2, 'Altura máxima é 2.50m'),
 
-		email: Yup.string()
-			.email('Informe um e-mail válido')
-			.required('Informe o e-mail do usuário'),
+		weight: Yup.number()
+			.typeError('Informe um valor numérico')
+			.required('Informe o peso')
+			.min(30, 'Peso mínimo é 30kg')
+			.max(200, 'Peso máximo é 200kg'),
 
-		password: isFormEdit
-			? Yup.string()
-			: Yup.string()
-				.required('Informe a senha do usuário')
-				.min(10, 'A senha deve conter no mínimo 10 caracteres')
-				.max(16, 'A senha deve conter no máximo 16 caracteres')
-				.matches(
-					/[A-Z].*[A-Z]/,
-					'A senha deve conter ao menos 2 letras maiúsculas',
-				)
-				.matches(
-					/[a-z].*[a-z].*[a-z]/,
-					'A senha deve conter ao menos 3 letras minúsculas',
-				)
-				.matches(
-					/[0-9].*[0-9]/,
-					'A senha deve conter ao menos 2 números',
-				)
-				.matches(
-					/[@#$%&]/,
-					'A senha deve conter ao menos 1 caractere especial: @#$%&',
-				),
+		waist: Yup.number()
+			.typeError('Informe um valor numérico')
+			.required('Informe a medida da cintura')
+			.min(40, 'Cintura mínima é 40cm')
+			.max(160, 'Cintura máxima é 160cm'),
+
+		hip: Yup.number()
+			.typeError('Informe um valor numérico')
+			.required('Informe a medida do quadril')
+			.min(50, 'Quadril mínimo é 50cm')
+			.max(180, 'Quadril máximo é 180cm'),
+
+		body_fat: Yup.number()
+			.typeError('Informe um valor numérico')
+			.required('Informe o percentual de gordura corporal')
+			.min(5, 'Mínimo de gordura corporal é 5%')
+			.max(50, 'Máximo de gordura corporal é 50%'),
+
+		bmi: Yup.number()
+			.typeError('Informe um valor numérico')
+			.required('Informe o IMC')
+			.min(10, 'IMC mínimo é 10')
+			.max(60, 'IMC máximo é 60'),
+
+		user_id: Yup.string().required(
+			'É necessário selecionar o aluno vinculado',
+		),
 	});

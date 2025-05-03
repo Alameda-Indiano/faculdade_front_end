@@ -1,7 +1,7 @@
 import { IMetadata } from '../../../types/IMetadata';
 
 export const metadataUser: IMetadata = {
-	title: 'Dashboard',
-	description: 'Configuração de Dashboard do Sistema',
+	title: 'Usuários',
+	description: 'Configuração de Usuários do Sistema',
 	robots: 'noindex, nofollow',
 };

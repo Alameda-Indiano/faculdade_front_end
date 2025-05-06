@@ -44,7 +44,7 @@ export const Dashboard = ({
 			if (userData) {
 				dispatch(
 					setAppContext({
-						user: userData,
+						user: userData.data,
 					}),
 				);
 			} else

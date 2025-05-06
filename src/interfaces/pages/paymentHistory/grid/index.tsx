@@ -17,6 +17,7 @@ import { TableRow } from './components/tableRow';
 import { TableToolbar } from './components/tableToolbar';
 import { IPaymentHistoryFilters } from './interfaces';
 import { TABLE_HEAD } from './mock/tableHeader';
+import { useAppSelector } from '../../../../infrastructure/contexts';
 
 export const PaymentHistoryGrid = () => {
 	const table = useTable({
@@ -27,7 +28,9 @@ export const PaymentHistoryGrid = () => {
 
 	const isLoading = useBoolean(false);
 	const router = useRouter();
-
+	const { user } = useAppSelector((state) => state.app);
+	const canEdit = user?.type === 'ADMIN';
+	
 	const PaymentHistoryRepository = usePaymentHistoryRepository();
 
 	const [tableData, setTableData] = useState<IPaymentHistoryEntity[]>([]);
@@ -122,6 +125,7 @@ export const PaymentHistoryGrid = () => {
 					onDeleteRow={() => handleDeleteRow(row.id!)}
 					onEditRow={() => handleEditRow(row.id!)}
 					filters={filters}
+					canEdit={canEdit}
 				/>
 			));
 	};
@@ -151,6 +155,7 @@ export const PaymentHistoryGrid = () => {
 								tableData.map((row: any) => row.id),
 							)
 						}
+						canEdit={canEdit}
 					/>
 					<TableBody>
 						{isLoading.value ? (

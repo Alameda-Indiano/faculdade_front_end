@@ -17,6 +17,7 @@ import { TableRow } from './components/tableRow';
 import { TableToolbar } from './components/tableToolbar';
 import { IBodyMeasurementFilters } from './interfaces';
 import { TABLE_HEAD } from './mock/tableHeader';
+import { useAppSelector } from '../../../../infrastructure/contexts';
 
 export const BodyMeasurementGrid = () => {
 	const table = useTable({
@@ -27,6 +28,8 @@ export const BodyMeasurementGrid = () => {
 
 	const isLoading = useBoolean(false);
 	const router = useRouter();
+	const { user } = useAppSelector((state) => state.app);
+	const canEdit = user?.type === 'ADMIN';
 
 	const bodyMeasurementRepository = useBodyMeasurementRepository();
 
@@ -122,6 +125,7 @@ export const BodyMeasurementGrid = () => {
 					onDeleteRow={() => handleDeleteRow(row.id!)}
 					onEditRow={() => handleEditRow(row.id!)}
 					filters={filters}
+					canEdit={canEdit}
 				/>
 			));
 	};
@@ -151,6 +155,7 @@ export const BodyMeasurementGrid = () => {
 								tableData.map((row: any) => row.id),
 							)
 						}
+						canEdit={canEdit}
 					/>
 					<TableBody>
 						{isLoading.value ? (

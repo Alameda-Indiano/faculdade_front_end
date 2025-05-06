@@ -19,6 +19,7 @@ export const TableRow = ({
 	onEditRow,
 	row,
 	selected,
+	canEdit
 }: ITableRowProps) => {
 	const notFound = 'Não informado';
 
@@ -41,22 +42,24 @@ export const TableRow = ({
 
 	return (
 		<TableRowDefault hover selected={selected}>
-			<TableCell align='right' sx={{ px: 1, whiteSpace: 'nowrap' }}>
-				<Tooltip
-					TransitionComponent={Zoom}
-					TransitionProps={{ timeout: 300 }}
-					arrow
-					disableInteractive
-					title='Mais Opções'
-				>
-					<LoadingButton
-						loading={isLoading.value}
-						onClick={popover.onOpen}
+			{canEdit && (
+				<TableCell align='right' sx={{ px: 1, whiteSpace: 'nowrap' }}>
+					<Tooltip
+						TransitionComponent={Zoom}
+						TransitionProps={{ timeout: 300 }}
+						arrow
+						disableInteractive
+						title='Mais Opções'
 					>
-						<Iconify icon='eva:more-vertical-fill' />
-					</LoadingButton>
-				</Tooltip>
-			</TableCell>
+						<LoadingButton
+							loading={isLoading.value}
+							onClick={popover.onOpen}
+						>
+							<Iconify icon='eva:more-vertical-fill' />
+						</LoadingButton>
+					</Tooltip>
+				</TableCell>
+			)}
 
 			<TableCell>{row?.user?.name ?? notFound}</TableCell>
 			<TableCell>{row?.weight ?? notFound}</TableCell>

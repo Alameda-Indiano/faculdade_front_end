@@ -17,6 +17,7 @@ import { TableRow } from './components/tableRow';
 import { TableToolbar } from './components/tableToolbar';
 import { IClassFilters } from './interfaces';
 import { TABLE_HEAD } from './mock/tableHeader';
+import { useAppSelector } from '../../../../infrastructure/contexts';
 
 export const ClassGrid = () => {
 	const table = useTable({
@@ -27,6 +28,8 @@ export const ClassGrid = () => {
 
 	const isLoading = useBoolean(false);
 	const router = useRouter();
+	const { user } = useAppSelector((state) => state.app);
+	const canEdit = user?.type === 'ADMIN';
 
 	const classRepository = useClassRepository();
 
@@ -118,6 +121,7 @@ export const ClassGrid = () => {
 					onDeleteRow={() => handleDeleteRow(row.id!)}
 					onEditRow={() => handleEditRow(row.id!)}
 					filters={filters}
+					canEdit={canEdit}
 				/>
 			));
 	};
@@ -147,6 +151,7 @@ export const ClassGrid = () => {
 								tableData.map((row: any) => row.id),
 							)
 						}
+						canEdit={canEdit}
 					/>
 					<TableBody>
 						{isLoading.value ? (

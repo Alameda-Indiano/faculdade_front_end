@@ -18,6 +18,7 @@ export const TableRow = ({
 	onEditRow,
 	row,
 	selected,
+	canEdit
 }: ITableRowProps) => {
 	const notFound = 'Não informado';
 
@@ -38,7 +39,7 @@ export const TableRow = ({
 
 	return (
 		<TableRowDefault hover selected={selected}>
-			{!!row && row?.id && (
+			{!!row && row?.id && canEdit && (
 				<TableCell align='right' sx={{ px: 1, whiteSpace: 'nowrap' }}>
 					<Tooltip
 						TransitionComponent={Zoom}

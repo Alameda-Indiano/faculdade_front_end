@@ -8,4 +8,5 @@ export interface ITableRowProps {
 	onSelectRow: VoidFunction;
 	filters: IPaymentHistoryFilters;
 	onDeleteRow: VoidFunction;
+	canEdit: boolean;
 }

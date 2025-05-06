@@ -147,6 +147,7 @@ export const UserGrid = () => {
 								tableData.map((row: any) => row.id),
 							)
 						}
+						canEdit={true}
 					/>
 					<TableBody>
 						{isLoading.value ? (

@@ -1,19 +1,20 @@
 import { useMemo } from 'react';
 import { useAppSelector } from '../../../../infrastructure/contexts';
 import { INavBarRoutes } from '../navBar/types/INavBarRoutes';
-import { navBarDefault } from './default';
+import { adminNavBar } from '../navBarRoutes/admin';
+import { studentNavBar } from '../navBarRoutes/student';
 
 export const useNavBarConfig = (): INavBarRoutes[] => {
-	const { company } = useAppSelector((state) => state.app);
+	const { company, user } = useAppSelector((state) => state.app);
 
 	const configs = useMemo(
 		() => ({
-			default: navBarDefault,
+			default: user?.type === 'ADMIN'? adminNavBar : studentNavBar,
 		}),
 		[],
 	);
 
 	return useMemo(() => {
-		return configs.default as INavBarRoutes[];
+		return configs.default;
 	}, [company, configs]);
 };

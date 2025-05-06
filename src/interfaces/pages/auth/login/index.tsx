@@ -62,12 +62,14 @@ export const LoginPage = () => {
 
 				dispatch(
 					setAppContext({
-						token: authData.data.token,
-						user: authData.data.user,
+						token: authData?.data?.token,
+						user: authData?.data?.user,
 					}),
 				);
 
-				router.push(Routes.user);
+                if(authData.data?.user.type ==='ADMIN') router.push(Routes.user);
+
+				router.push(Routes.frequencies);
 			}
 		} catch (error) {
 			console.error(error);

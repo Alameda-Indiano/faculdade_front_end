@@ -26,6 +26,7 @@ type Props = {
 	onSort?: (id: string) => void;
 	onSelectAllRows?: (checked: boolean) => void;
 	sx?: SxProps<Theme>;
+	canEdit: boolean;
 };
 
 export default function TableHead({
@@ -37,11 +38,14 @@ export default function TableHead({
 	onSort,
 	onSelectAllRows,
 	sx,
+	canEdit
 }: Props) {
 	return (
 		<TableHeadDefault sx={sx}>
 			<TableRow>
-				{onSelectAllRows && <TableCell padding='checkbox' />}
+				{ canEdit &&
+					onSelectAllRows && <TableCell padding='checkbox' />
+				}
 
 				{headLabel.map((headCell) => (
 					<TableCell

@@ -17,6 +17,7 @@ import { TableRow } from './components/tableRow';
 import { TableToolbar } from './components/tableToolbar';
 import { IFrequencyFilters } from './interfaces';
 import { TABLE_HEAD } from './mock/tableHeader';
+import { useAppSelector } from '../../../../infrastructure/contexts';
 
 export const FrequenciesGrid = () => {
 	const table = useTable({
@@ -27,6 +28,8 @@ export const FrequenciesGrid = () => {
 
 	const isLoading = useBoolean(false);
 	const router = useRouter();
+	const { user } = useAppSelector((state) => state.app);
+	const canEdit = user?.type === 'ADMIN';
 
 	const frequencyRepository = useFrequencyRepository();
 
@@ -122,6 +125,7 @@ export const FrequenciesGrid = () => {
 					onDeleteRow={() => handleDeleteRow(row.id!)}
 					onEditRow={() => handleEditRow(row.id!)}
 					filters={filters}
+					canEdit={canEdit}
 				/>
 			));
 	};
@@ -139,6 +143,7 @@ export const FrequenciesGrid = () => {
 			>
 				<Table size='small'>
 					<TableHead
+						canEdit={canEdit}
 						order={table.order}
 						orderBy={table.orderBy}
 						headLabel={TABLE_HEAD}

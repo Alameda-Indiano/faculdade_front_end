@@ -8,4 +8,5 @@ export interface ITableRowProps {
 	onSelectRow: VoidFunction;
 	filters: IFrequencyFilters;
 	onDeleteRow: VoidFunction;
+	canEdit: boolean;
 }

@@ -15,6 +15,7 @@ import { ITableRowProps } from './interfaces';
 
 export const TableRow = ({
 	onDeleteRow,
+	canEdit,
 	onEditRow,
 	row,
 	selected,
@@ -33,7 +34,7 @@ export const TableRow = ({
 
 	return (
 		<TableRowDefault hover selected={selected}>
-			{!!row && row?.id && (
+			{!!row && row?.id && canEdit && (
 				<TableCell align='right' sx={{ px: 1, whiteSpace: 'nowrap' }}>
 					<Tooltip
 						TransitionComponent={Zoom}

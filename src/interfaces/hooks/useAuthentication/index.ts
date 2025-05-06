@@ -28,7 +28,7 @@ export const useAuthentication = () => {
 
 			const decodedToken = jwtDecode<IAuthPayload>(token);
 
-			if (!decodedToken || !decodedToken.user) {
+			if (!decodedToken.user) {
 				console.error(`Error: JWT Decode Not Found`);
 				router.push(Routes.unauthorized);
 				return;

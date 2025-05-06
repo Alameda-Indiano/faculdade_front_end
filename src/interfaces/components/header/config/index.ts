@@ -5,7 +5,7 @@ import { adminNavBar } from '../navBarRoutes/admin';
 import { studentNavBar } from '../navBarRoutes/student';
 
 export const useNavBarConfig = (): INavBarRoutes[] => {
-	const { company, user } = useAppSelector((state) => state.app);
+	const { user } = useAppSelector((state) => state.app);
 
 	const configs = useMemo(
 		() => ({
@@ -16,5 +16,5 @@ export const useNavBarConfig = (): INavBarRoutes[] => {
 
 	return useMemo(() => {
 		return configs.default;
-	}, [company, configs]);
+	}, [configs]);
 };

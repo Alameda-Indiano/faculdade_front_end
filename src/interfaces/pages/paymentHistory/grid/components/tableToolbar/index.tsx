@@ -5,10 +5,13 @@ import { Routes } from '../../../../../../app/routes';
 import { Iconify } from '../../../../../components/iconify';
 import { useBoolean } from '../../../../../hooks/useBoolean';
 import { ITableToolbarProps } from './interfaces';
+import { useAppSelector } from '../../../../../../infrastructure/contexts';
 
 export const TableToolbar = ({ filters, onFilters }: ITableToolbarProps) => {
 	const isLoading = useBoolean(false);
 	const router = useRouter();
+	const { user } = useAppSelector((state) => state.app);
+	const canCreate = user?.type === 'ADMIN';
 
 	const handleCreate = () => {
 		isLoading.onTrue();
@@ -33,20 +36,22 @@ export const TableToolbar = ({ filters, onFilters }: ITableToolbarProps) => {
 				flexGrow={1}
 				sx={{ width: 1 }}
 			>
-				<Tooltip
-					TransitionComponent={Zoom}
-					TransitionProps={{ timeout: 300 }}
-					arrow
-					disableInteractive
-					title='Cadastrar Novo Histórico de Pagamento'
-				>
-					<LoadingButton
-						onClick={handleCreate}
-						loading={isLoading.value}
+				{canCreate && (
+					<Tooltip
+						TransitionComponent={Zoom}
+						TransitionProps={{ timeout: 300 }}
+						arrow
+						disableInteractive
+						title='Cadastrar Novo Histórico de Pagamento'
 					>
-						<Iconify icon='ic:baseline-plus' width={28} />
-					</LoadingButton>
-				</Tooltip>
+						<LoadingButton
+							onClick={handleCreate}
+							loading={isLoading.value}
+						>
+							<Iconify icon='ic:baseline-plus' width={28} />
+						</LoadingButton>
+					</Tooltip>
+				)}
 				<TextField
 					sx={{ flex: 1 }}
 					value={filters.search}

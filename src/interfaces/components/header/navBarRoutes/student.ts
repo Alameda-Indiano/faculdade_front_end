@@ -3,7 +3,7 @@ import { INavBarRoutes } from '../navBar/types/INavBarRoutes';
 
 export const studentNavBar: INavBarRoutes[] = [
     {
-        title: 'Dashboard',
+        title: 'Progresso',
         icon: 'home',
         route: Routes.dashboard,
     },
@@ -16,15 +16,5 @@ export const studentNavBar: INavBarRoutes[] = [
         title: 'Histórico de Pagamentos',
         icon: 'money-bill',
         route: Routes.paymentHistory,
-    },
-    {
-        title: 'Classes de Aula',
-        icon: 'users-class',
-        route: Routes.class,
-    },
-    {
-        title: 'Medidas',
-        icon: 'ruler',
-        route: Routes.bodyMeasurement,
-    }  
+    }
 ];

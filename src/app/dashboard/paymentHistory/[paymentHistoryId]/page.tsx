@@ -6,10 +6,13 @@ import { usePaymentHistoryRepository } from '../../../../infrastructure/reposito
 import { PaymentHistoryForm } from '../../../../interfaces/pages/paymentHistory/form';
 import { IFormPageProps } from '../../../../interfaces/pages/paymentHistory/form/types/IFormPageProps';
 import Loading from '../../../loading';
+import { useAppSelector } from '../../../../infrastructure/contexts';
 
 export default function PaymentHistoryEditPage({ params }: IFormPageProps) {
 	const { paymentHistoryId } = params;
 	const paymentHistoryRepository = usePaymentHistoryRepository();
+	const { user } = useAppSelector((state) => state.app);
+	if (user?.type !== 'ADMIN') console.log('redirect-user');
 
 	const [editPaymentHistory, setPaymentHistoryEdit] = useState<
 		IPaymentHistoryEntity | undefined

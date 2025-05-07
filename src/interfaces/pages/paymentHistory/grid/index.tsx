@@ -18,19 +18,22 @@ import { TableToolbar } from './components/tableToolbar';
 import { IPaymentHistoryFilters } from './interfaces';
 import { TABLE_HEAD } from './mock/tableHeader';
 import { useAppSelector } from '../../../../infrastructure/contexts';
+import { isArray } from 'lodash';
 
 export const PaymentHistoryGrid = () => {
 	const table = useTable({
 		defaultRowsPerPage: 10,
 	});
-
+	
 	const { rowsPerPage, page } = table;
-
+	
 	const isLoading = useBoolean(false);
 	const router = useRouter();
 	const { user } = useAppSelector((state) => state.app);
-	const canEdit = user?.type === 'ADMIN';
+	const isAdmin = user?.type === 'ADMIN';
 	
+	const tableHead = isAdmin ? TABLE_HEAD : TABLE_HEAD.filter((item) => item.label !== 'Usuário' )  
+
 	const PaymentHistoryRepository = usePaymentHistoryRepository();
 
 	const [tableData, setTableData] = useState<IPaymentHistoryEntity[]>([]);
@@ -49,19 +52,32 @@ export const PaymentHistoryGrid = () => {
 		table.page * table.rowsPerPage + table.rowsPerPage,
 	);
 
+	const getGridItens = async (all: boolean) => {
+		const dataPaymentHistorys = await PaymentHistoryRepository.getAll(all ? debouncedSearch : user?.id)
+
+		if (!dataPaymentHistorys?.success) {
+			enqueueSnackbar('Histórico de Pagamento Não Encontrado', {
+				variant: 'error',
+			});
+
+			return []
+		}
+
+		if (dataPaymentHistorys.data) {
+			return isArray(dataPaymentHistorys.data)
+				? dataPaymentHistorys.data
+				: [dataPaymentHistorys.data];
+		}
+
+		return [];
+	};
+
 	const queryDataTable = async () => {
 		isLoading.onTrue();
 
 		try {
-			const dataPaymentHistorys =
-				await PaymentHistoryRepository.getAll(debouncedSearch);
-
-			if (dataPaymentHistorys.success)
-				setTableData(dataPaymentHistorys.data || []);
-			else
-				enqueueSnackbar('Histórico de Pagamento Não Encontrado', {
-					variant: 'error',
-				});
+			const data = await getGridItens(isAdmin);
+			setTableData(data);
 		} catch (error) {
 			console.error(error);
 			enqueueSnackbar('Erro Interno do Servidor!', { variant: 'error' });
@@ -125,7 +141,7 @@ export const PaymentHistoryGrid = () => {
 					onDeleteRow={() => handleDeleteRow(row.id!)}
 					onEditRow={() => handleEditRow(row.id!)}
 					filters={filters}
-					canEdit={canEdit}
+					canEdit={isAdmin}
 				/>
 			));
 	};
@@ -145,7 +161,7 @@ export const PaymentHistoryGrid = () => {
 					<TableHead
 						order={table.order}
 						orderBy={table.orderBy}
-						headLabel={TABLE_HEAD}
+						headLabel={tableHead}
 						rowCount={tableData.length}
 						numSelected={table.selected.length}
 						onSort={table.onSort}
@@ -155,13 +171,14 @@ export const PaymentHistoryGrid = () => {
 								tableData.map((row: any) => row.id),
 							)
 						}
-						canEdit={canEdit}
+						canEdit={isAdmin}
 					/>
 					<TableBody>
 						{isLoading.value ? (
 							<GridLoading
-								columns={TABLE_HEAD.length}
+								columns={tableHead.length}
 								rowsPerPage={table.rowsPerPage}
+								hasConfigColumn={isAdmin}
 							/>
 						) : (
 							renderTableContent()

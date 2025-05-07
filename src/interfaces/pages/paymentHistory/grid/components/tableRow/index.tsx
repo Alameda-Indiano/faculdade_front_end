@@ -59,9 +59,11 @@ export const TableRow = ({
 				</TableCell>
 			)}
 
-			<TableCell sx={{ whiteSpace: 'nowrap' }}>
-				{row?.subscription?.user?.name || notFound}
-			</TableCell>
+			{canEdit && (
+				<TableCell sx={{ whiteSpace: 'nowrap' }}>
+					{row?.subscription?.user?.name || notFound}
+				</TableCell>
+			)}
 
 			<TableCell sx={{ whiteSpace: 'nowrap' }}>
 				<Typography variant='body2' gutterBottom>

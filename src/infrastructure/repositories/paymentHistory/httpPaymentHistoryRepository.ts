@@ -27,7 +27,7 @@ export const httpPaymentHistoryRepository: IPaymentHistoryRepository = {
 	): Promise<IResponse<IPaymentHistoryEntity[]>> => {
 		try {
 			const url = userId
-				? `/payment-histories?userId=${userId}`
+				? `/payment-histories/user/${userId}`
 				: '/payment-histories';
 			const response =
 				await apiInstance.get<IResponse<IPaymentHistoryEntity[]>>(url);

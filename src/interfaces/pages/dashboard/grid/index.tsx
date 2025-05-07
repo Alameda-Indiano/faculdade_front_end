@@ -1,13 +1,18 @@
 'use client';
 
-import { Box, CircularProgress, Alert } from '@mui/material';
+import { Box, CircularProgress, Alert, Card } from '@mui/material';
 import { Tiles } from './components/tiles';
 import { useEffect } from 'react';
 import { styles } from './styles';
 import { DASHBOARD_TILES } from './constants';
+import AppAreaInstalled from '../../../components/graph';
+import { useFrequencyChart } from '../../../hooks/useChart/useFrequencyChart';
 import { useStatusCount } from '../../../hooks/useStatusCount';
+import { useStatusRepository } from '../../../../infrastructure/repositories/status';
+import { useFinancialChart } from '../../../hooks/useChart/useFinanceChart';
 
 export const DashboardGrid = () => {
+	const statusRepository = useStatusRepository();
 	const {
 		data: countTile,
 		isLoading,
@@ -15,13 +20,24 @@ export const DashboardGrid = () => {
 		fetchStatusCount,
 	} = useStatusCount();
 
+	const {
+		isLoading: isLoadingFinancial,
+		fetchData: fetchDataFinancial,
+		chartData: chartDataFinancial,
+	} = useFinancialChart('Financas', statusRepository.financialManagement);
+
 	useEffect(() => {
 		fetchStatusCount();
 	}, [fetchStatusCount]);
 
-	if (isLoading) {
+	useEffect(() => {
+		fetchDataFinancial();
+	}, []);
+
+	useEffect(() => console.log(chartDataFinancial), [chartDataFinancial]);
+	if (isLoading.value) {
 		return (
-			<Box sx={styles.container} display='flex' justifyContent='center'>
+			<Box display='flex' justifyContent='center'>
 				<CircularProgress />
 			</Box>
 		);
@@ -29,14 +45,14 @@ export const DashboardGrid = () => {
 
 	if (error) {
 		return (
-			<Box sx={styles.container}>
+			<Box>
 				<Alert severity='error'>{error.message}</Alert>
 			</Box>
 		);
 	}
 
 	return (
-		<Box sx={styles.container}>
+		<Card sx={{ width: '80vw', overflow: 'auto' }}>
 			<Box sx={styles.tilesContainer}>
 				<Tiles
 					tiles={[
@@ -59,6 +75,15 @@ export const DashboardGrid = () => {
 					]}
 				/>
 			</Box>
-		</Box>
+			<Box mt={15}>
+				<AppAreaInstalled
+					title='Finanças'
+					subheader='Gráfico indicativo de finanças'
+					currentDateTxt='Diário'
+					chart={chartDataFinancial}
+					loading={isLoadingFinancial.value}
+				/>
+			</Box>
+		</Card>
 	);
 };

@@ -7,9 +7,8 @@ export const styles = {
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		mt: 10,
-		mb: 10,
 		pl: 40,
 		pr: 40,
+		mb:10
 	},
 } satisfies Record<string, SxProps>;

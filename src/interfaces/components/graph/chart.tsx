@@ -34,8 +34,9 @@ export function LineChart({
 					colors: '#e5e7eb',
 				},
 				formatter: (value: number) => {
-					// return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-					return value.toString();
+					return seriesData[0]?.name === 'Financas'
+						? `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+						: value.toString();
 				},
 			},
 			title: { text: 'Valores', style: { color: '#e5e7eb' } },

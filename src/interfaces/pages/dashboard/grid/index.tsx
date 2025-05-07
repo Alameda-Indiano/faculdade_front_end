@@ -77,7 +77,7 @@ export const DashboardGrid = () => {
 			</Box>
 			<Box mt={15}>
 				<AppAreaInstalled
-					title='Financas'
+					title='Finanças'
 					subheader='Gráfico indicativo de finanças'
 					currentDateTxt='Diário'
 					chart={chartDataFinancial}

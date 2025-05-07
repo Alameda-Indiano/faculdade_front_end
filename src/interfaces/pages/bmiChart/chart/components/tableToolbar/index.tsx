@@ -1,8 +1,14 @@
-import { MenuItem, Select, Stack } from '@mui/material';
+import {
+	FormControl,
+	InputLabel,
+	MenuItem,
+	Select,
+	Stack,
+} from '@mui/material';
+import { enqueueSnackbar } from 'notistack';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { IUserEntity } from '../../../../../../domain/entities/IUserEntity';
 import { useUserRepository } from '../../../../../../infrastructure/repositories/user';
-import { enqueueSnackbar } from 'notistack';
 
 export const TableToolbar = ({
 	setUserId,
@@ -45,23 +51,27 @@ export const TableToolbar = ({
 				sx={{ width: 1 }}
 			>
 				{users && users.length > 0 && (
-					<Select
-						sx={{ width: '100%' }}
-						fullWidth
-						name='user_id'
-						label='Usuário'
-						onChange={(e) => setUserId(e.target.value as string)}
-					>
-						{users.map(({ name, id }) => (
-							<MenuItem
-								//@ts-ignore
-								key={id}
-								value={id}
-							>
-								{name}
-							</MenuItem>
-						))}
-					</Select>
+					<FormControl fullWidth>
+						<InputLabel id='user_id'>Usuário</InputLabel>
+						<Select
+							fullWidth
+							labelId='user_id'
+							name='user_id'
+							onChange={(e) =>
+								setUserId(e.target.value as string)
+							}
+						>
+							{users.map(({ name, id }) => (
+								<MenuItem
+									//@ts-ignore
+									key={id}
+									value={id}
+								>
+									{name}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
 				)}
 			</Stack>
 		</Stack>

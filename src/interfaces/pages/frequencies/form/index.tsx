@@ -28,10 +28,13 @@ import RHFSelect, {
 } from '../../../components/hookForm/rhf-select';
 import { IUserEntity } from '../../../../domain/entities/IUserEntity';
 import { useUserRepository } from '../../../../infrastructure/repositories/user';
+import { useAppSelector } from '../../../../infrastructure/contexts';
 
 export const FrequenciesForm = ({ editFrequencies }: IFormProps) => {
 	const router = useRouter();
 	const isEditMod = useBoolean(false);
+	const { user } = useAppSelector((state) => state.app);
+	const isAdmin = user?.type === 'ADMIN';
 
 	const frequencyRepository = useFrequencyRepository();
 	const userRepository = useUserRepository();
@@ -66,7 +69,7 @@ export const FrequenciesForm = ({ editFrequencies }: IFormProps) => {
 		try {
 			let response = {};
 
-			response = await frequencyRepository.create(data);
+			response = await frequencyRepository.create(isAdmin ? data : { user_id: user?.id } );
 
 			if (response) {
 				enqueueSnackbar('Frequência cadastrada com Sucesso!');
@@ -91,7 +94,7 @@ export const FrequenciesForm = ({ editFrequencies }: IFormProps) => {
 				onSubmit={formContext.handleSubmit((data) => onSubmit(data))}
 			>
 				<Card sx={{ p: 3 }}>
-					<Box sx={{ pb: 5 }}>
+					<Box sx={{ pb: isAdmin ? 5 : 0 }}>
 						<Typography
 							sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}
 						>
@@ -110,27 +113,29 @@ export const FrequenciesForm = ({ editFrequencies }: IFormProps) => {
 						}}
 					>
 						{' '}
-						<RHFSelect
-							sx={{ width: '100%' }}
-							fullWidth
-							name='user_id'
-							label='Usuário'
-						>
-							{users.map(({ name, id }) => (
-								<MenuItem
-									//@ts-ignore
-									key={id}
-									value={id}
-								>
-									{name}
-								</MenuItem>
-							))}
-						</RHFSelect>
+						{isAdmin && (
+							<RHFSelect
+								sx={{ width: '100%' }}
+								fullWidth
+								name='user_id'
+								label='Usuário'
+							>
+								{users.map(({ name, id }) => (
+									<MenuItem
+										//@ts-ignore
+										key={id}
+										value={id}
+									>
+										{name}
+									</MenuItem>
+								))}
+							</RHFSelect>
+						)}
 						<Stack
 							sx={{
 								width: '100%',
 								display: 'flex',
-								alignItems: 'flex-end',
+								alignItems: isAdmin ? 'flex-end' : 'center',
 								mt: 5,
 							}}
 						>

@@ -19,6 +19,7 @@ import { IFrequencyFilters } from './interfaces';
 import { TABLE_HEAD } from './mock/tableHeader';
 import { useAppSelector } from '../../../../infrastructure/contexts';
 import { isArray } from 'lodash';
+import { isToday } from '../../../../infrastructure/utils/isToday';
 
 export const FrequenciesGrid = () => {
 	const table = useTable({
@@ -37,6 +38,8 @@ export const FrequenciesGrid = () => {
 	const frequencyRepository = useFrequencyRepository();
 
 	const [tableData, setTableData] = useState<IFrequencyEntity[]>([]);
+
+	const canCreateRegister = isAdmin ? true : tableData.filter(item => isToday(new Date(item.created_at ?? ""))).length === 0
 
 	const { filters, onFilters } = useFilters<IFrequencyFilters>({
 		initialFilters: {
@@ -149,7 +152,7 @@ export const FrequenciesGrid = () => {
 
 	return (
 		<Card sx={{ width: '70vw' }}>
-			<TableToolbar filters={filters} onFilters={onFilters} />
+			<TableToolbar filters={filters} onFilters={onFilters} disabled={!canCreateRegister} />
 			<TableContainer
 				sx={{
 					height: '45vh',

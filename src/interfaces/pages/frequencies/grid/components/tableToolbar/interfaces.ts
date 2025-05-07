@@ -8,4 +8,5 @@ export interface IFrequencyFiltersProps {
 export interface ITableToolbarProps {
 	filters: IFrequencyFilters;
 	onFilters: ({ filterKey, value }: IFrequencyFiltersProps) => void;
+	disabled: boolean;
 }

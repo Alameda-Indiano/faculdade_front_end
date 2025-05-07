@@ -6,7 +6,7 @@ import { Iconify } from '../../../../../components/iconify';
 import { useBoolean } from '../../../../../hooks/useBoolean';
 import { ITableToolbarProps } from './interfaces';
 
-export const TableToolbar = ({ filters, onFilters }: ITableToolbarProps) => {
+export const TableToolbar = ({ filters, onFilters, disabled }: ITableToolbarProps) => {
 	const isLoading = useBoolean(false);
 	const router = useRouter();
 
@@ -38,14 +38,18 @@ export const TableToolbar = ({ filters, onFilters }: ITableToolbarProps) => {
 					TransitionProps={{ timeout: 300 }}
 					arrow
 					disableInteractive
-					title='Cadastrar Nova Frequência'
+					title={disabled ? 'Você já realizou o cadastro da frequência hoje' : 'Cadastrar Nova Frequência'}
 				>
-					<LoadingButton
-						onClick={handleCreate}
-						loading={isLoading.value}
-					>
-						<Iconify icon='ic:baseline-plus' width={28} />
-					</LoadingButton>
+					<span>
+						<LoadingButton
+							onClick={handleCreate}
+							loading={isLoading.value}
+							disabled={disabled}
+							sx={{ pointerEvents: disabled ? 'none' : 'auto' }} 
+						>
+							<Iconify icon='ic:baseline-plus' width={28} />
+						</LoadingButton>
+					</span>
 				</Tooltip>
 				<TextField
 					sx={{ flex: 1 }}

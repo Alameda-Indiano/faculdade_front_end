@@ -158,6 +158,7 @@ export const SubscriptionsGrid = () => {
 							<GridLoading
 								columns={TABLE_HEAD.length}
 								rowsPerPage={table.rowsPerPage}
+								hasConfigColumn={true}
 							/>
 						) : (
 							renderTableContent()

@@ -1,8 +1,8 @@
 import { Skeleton, TableCell, TableRow } from '@mui/material';
 import { IGridLoadingProps } from './interfaces';
 
-export const GridLoading = ({ columns, rowsPerPage }: IGridLoadingProps) => {
-	const cells = Array.from({ length: columns + 1 }, (_, i) => (
+export const GridLoading = ({ columns, rowsPerPage, hasConfigColumn }: IGridLoadingProps) => {
+	const cells = Array.from({ length: hasConfigColumn ? columns + 1 : columns }, (_, i) => (
 		<TableCell key={i}>
 			<Skeleton />
 		</TableCell>

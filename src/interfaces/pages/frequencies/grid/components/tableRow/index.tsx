@@ -52,10 +52,12 @@ export const TableRow = ({
 					</Tooltip>
 				</TableCell>
 			)}
-
-			<TableCell sx={{ whiteSpace: 'nowrap' }}>
-				{row?.user?.name || notFound}
-			</TableCell>
+			
+			{canEdit && (
+				<TableCell sx={{ whiteSpace: 'nowrap' }}>
+					{row?.user?.name || notFound}
+				</TableCell>
+			)}
 
 			<TableCell sx={{ whiteSpace: 'nowrap' }}>
 				{(row?.created_at &&

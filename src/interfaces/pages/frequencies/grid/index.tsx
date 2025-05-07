@@ -32,6 +32,8 @@ export const FrequenciesGrid = () => {
 	const { user } = useAppSelector((state) => state.app);
 	const isAdmin = user?.type === 'ADMIN';
 
+	const tableHead = isAdmin ? TABLE_HEAD : TABLE_HEAD.filter(item => item.label !== 'Usuário')
+
 	const frequencyRepository = useFrequencyRepository();
 
 	const [tableData, setTableData] = useState<IFrequencyEntity[]>([]);
@@ -58,6 +60,8 @@ export const FrequenciesGrid = () => {
 			enqueueSnackbar('Frequência Não Encontrada', {
 				variant: 'error',
 			});
+
+			return []
 		}
 
 		if (dataFrequencies.data) {
@@ -159,7 +163,7 @@ export const FrequenciesGrid = () => {
 						canEdit={isAdmin}
 						order={table.order}
 						orderBy={table.orderBy}
-						headLabel={TABLE_HEAD}
+						headLabel={tableHead}
 						rowCount={tableData.length}
 						numSelected={table.selected.length}
 						onSort={table.onSort}
@@ -173,8 +177,9 @@ export const FrequenciesGrid = () => {
 					<TableBody>
 						{isLoading.value ? (
 							<GridLoading
-								columns={TABLE_HEAD.length}
+								columns={tableHead.length}
 								rowsPerPage={table.rowsPerPage}
+								hasConfigColumn={isAdmin}
 							/>
 						) : (
 							renderTableContent()

@@ -1,12 +1,15 @@
 'use client';
-
-import ReactApexChart from 'react-apexcharts';
+import dynamic from 'next/dynamic';
 
 interface LineChartProps {
 	categories?: string[];
 	seriesData: { name: string; data: number[] }[];
 	height?: number;
 }
+
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {
+	ssr: false,
+});
 
 export function LineChart({
 	categories,

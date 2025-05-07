@@ -4,7 +4,7 @@ import { INavBarRoutes } from '../navBar/types/INavBarRoutes';
 export const studentNavBar: INavBarRoutes[] = [
     {
         title: 'Progresso',
-        icon: 'home',
+        icon: 'bars-progress',
         route: Routes.dashboard,
     },
     {

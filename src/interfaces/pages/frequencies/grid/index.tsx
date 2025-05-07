@@ -18,6 +18,7 @@ import { TableToolbar } from './components/tableToolbar';
 import { IFrequencyFilters } from './interfaces';
 import { TABLE_HEAD } from './mock/tableHeader';
 import { useAppSelector } from '../../../../infrastructure/contexts';
+import { isArray } from 'lodash';
 
 export const FrequenciesGrid = () => {
 	const table = useTable({
@@ -29,7 +30,7 @@ export const FrequenciesGrid = () => {
 	const isLoading = useBoolean(false);
 	const router = useRouter();
 	const { user } = useAppSelector((state) => state.app);
-	const canEdit = user?.type === 'ADMIN';
+	const isAdmin = user?.type === 'ADMIN';
 
 	const frequencyRepository = useFrequencyRepository();
 
@@ -49,19 +50,31 @@ export const FrequenciesGrid = () => {
 		table.page * table.rowsPerPage + table.rowsPerPage,
 	);
 
+	const getGridItens = async (all: boolean): Promise<IFrequencyEntity[]> => {
+		
+		const dataFrequencies = await frequencyRepository.getAll(all ? debouncedSearch : user?.id)
+		
+		if (!dataFrequencies?.success) {
+			enqueueSnackbar('Frequência Não Encontrada', {
+				variant: 'error',
+			});
+		}
+
+		if (dataFrequencies.data) {
+			return isArray(dataFrequencies.data)
+				? dataFrequencies.data
+				: [dataFrequencies.data];
+		}
+
+		return [];
+	};
+
 	const queryDataTable = async () => {
 		isLoading.onTrue();
 
 		try {
-			const dataFrequencies =
-				await frequencyRepository.getAll(debouncedSearch);
-
-			if (dataFrequencies.success)
-				setTableData(dataFrequencies.data || []);
-			else
-				enqueueSnackbar('Frequência Não Encontrada', {
-					variant: 'error',
-				});
+			const data = await getGridItens(isAdmin);
+			setTableData(data);
 		} catch (error) {
 			console.error(error);
 			enqueueSnackbar('Erro Interno do Servidor!', { variant: 'error' });
@@ -125,7 +138,7 @@ export const FrequenciesGrid = () => {
 					onDeleteRow={() => handleDeleteRow(row.id!)}
 					onEditRow={() => handleEditRow(row.id!)}
 					filters={filters}
-					canEdit={canEdit}
+					canEdit={isAdmin}
 				/>
 			));
 	};
@@ -143,7 +156,7 @@ export const FrequenciesGrid = () => {
 			>
 				<Table size='small'>
 					<TableHead
-						canEdit={canEdit}
+						canEdit={isAdmin}
 						order={table.order}
 						orderBy={table.orderBy}
 						headLabel={TABLE_HEAD}

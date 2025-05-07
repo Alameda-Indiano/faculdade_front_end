@@ -24,7 +24,7 @@ export const httpFrequencyRepository: IFrequencyRepository = {
 	getAll: async (userId?: string): Promise<IResponse<IFrequencyEntity[]>> => {
 		try {
 			const url = userId
-				? `/frequencies?userId=${userId}`
+				? `/frequencies/user/${userId}`
 				: '/frequencies';
 			const response =
 				await apiInstance.get<IResponse<IFrequencyEntity[]>>(url);

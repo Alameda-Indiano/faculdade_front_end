@@ -1,11 +1,11 @@
 'use client';
 
 import { Box, Card } from '@mui/material';
-import AppAreaInstalled from '../../../components/graph';
-import { useStatusRepository } from '../../../../infrastructure/repositories/status';
 import { useEffect, useState } from 'react';
-import { TableToolbar } from './components/tableToolbar';
+import { useStatusRepository } from '../../../../infrastructure/repositories/status';
+import AppAreaInstalled from '../../../components/graph';
 import { useBmiChart } from '../../../hooks/useChart/useBmiChart';
+import { TableToolbar } from './components/tableToolbar';
 
 export const BmiChart = () => {
 	const statusRepository = useStatusRepository();
@@ -28,7 +28,7 @@ export const BmiChart = () => {
 	}, [userId]);
 
 	return (
-		<Card sx={{ width: '70vw' }}>
+		<Card sx={{ width: '80%' }}>
 			<TableToolbar setUserId={setUserId} />
 			<Box>
 				<AppAreaInstalled

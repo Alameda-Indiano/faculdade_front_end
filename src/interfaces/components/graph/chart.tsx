@@ -14,7 +14,7 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {
 export function LineChart({
 	categories,
 	seriesData,
-	height = 500,
+	height = 300,
 }: LineChartProps) {
 	const options: ApexCharts.ApexOptions = {
 		chart: {

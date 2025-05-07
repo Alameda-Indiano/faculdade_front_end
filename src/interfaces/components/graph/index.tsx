@@ -3,8 +3,8 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import { IGraphProps } from './interfaces';
 import { LineChart } from './chart';
+import { IGraphProps } from './interfaces';
 
 export default function AppAreaInstalled({
 	title,

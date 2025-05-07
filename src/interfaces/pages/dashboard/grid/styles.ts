@@ -5,10 +5,8 @@ export const styles = {
 		width: '100%',
 		display: 'flex',
 		flexWrap: 'wrap',
-		justifyContent: 'space-between',
+		justifyContent: 'space-around',
 		alignItems: 'center',
-		pl: 40,
-		pr: 40,
-		mb:10
+		mb: 10,
 	},
 } satisfies Record<string, SxProps>;

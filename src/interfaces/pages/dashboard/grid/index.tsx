@@ -1,14 +1,14 @@
 'use client';
 
-import { Box, CircularProgress, Alert, Card } from '@mui/material';
-import { Tiles } from './components/tiles';
+import { Alert, Box, Card, CircularProgress } from '@mui/material';
 import { useEffect } from 'react';
-import { styles } from './styles';
-import { DASHBOARD_TILES } from './constants';
-import AppAreaInstalled from '../../../components/graph';
-import { useStatusCount } from '../../../hooks/useStatusCount';
 import { useStatusRepository } from '../../../../infrastructure/repositories/status';
+import AppAreaInstalled from '../../../components/graph';
 import { useFinancialChart } from '../../../hooks/useChart/useFinanceChart';
+import { useStatusCount } from '../../../hooks/useStatusCount';
+import { Tiles } from './components/tiles';
+import { DASHBOARD_TILES } from './constants';
+import { styles } from './styles';
 
 export const DashboardGrid = () => {
 	const statusRepository = useStatusRepository();
@@ -74,7 +74,7 @@ export const DashboardGrid = () => {
 					]}
 				/>
 			</Box>
-			<Card sx={{ width: '80vw', overflow: 'auto' }}>
+			<Card sx={{ width: '80%', overflow: 'auto' }}>
 				<Box>
 					<AppAreaInstalled
 						title='Finanças'

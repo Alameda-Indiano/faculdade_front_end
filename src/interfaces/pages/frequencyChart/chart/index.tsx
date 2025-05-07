@@ -1,10 +1,10 @@
 'use client';
 
 import { Box, Card } from '@mui/material';
+import { useEffect } from 'react';
+import { useStatusRepository } from '../../../../infrastructure/repositories/status';
 import AppAreaInstalled from '../../../components/graph';
 import { useFrequencyChart } from '../../../hooks/useChart/useFrequencyChart';
-import { useStatusRepository } from '../../../../infrastructure/repositories/status';
-import { useEffect } from 'react';
 
 export const FrequencyChart = () => {
 	const statusRepository = useStatusRepository();
@@ -24,7 +24,7 @@ export const FrequencyChart = () => {
 	}, []);
 
 	return (
-		<Card sx={{ width: '70vw' }}>
+		<Card sx={{ width: '80%' }}>
 			<Box>
 				<AppAreaInstalled
 					title='Frequências'

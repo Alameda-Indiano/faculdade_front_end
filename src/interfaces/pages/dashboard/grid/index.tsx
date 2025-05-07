@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 import { styles } from './styles';
 import { DASHBOARD_TILES } from './constants';
 import AppAreaInstalled from '../../../components/graph';
-import { useFrequencyChart } from '../../../hooks/useChart/useFrequencyChart';
 import { useStatusCount } from '../../../hooks/useStatusCount';
 import { useStatusRepository } from '../../../../infrastructure/repositories/status';
 import { useFinancialChart } from '../../../hooks/useChart/useFinanceChart';
@@ -52,7 +51,7 @@ export const DashboardGrid = () => {
 	}
 
 	return (
-		<Card sx={{ width: '80vw', overflow: 'auto' }}>
+		<>
 			<Box sx={styles.tilesContainer}>
 				<Tiles
 					tiles={[
@@ -75,15 +74,17 @@ export const DashboardGrid = () => {
 					]}
 				/>
 			</Box>
-			<Box mt={15}>
-				<AppAreaInstalled
-					title='Finanças'
-					subheader='Gráfico indicativo de finanças'
-					currentDateTxt='Diário'
-					chart={chartDataFinancial}
-					loading={isLoadingFinancial.value}
-				/>
-			</Box>
-		</Card>
+			<Card sx={{ width: '80vw', overflow: 'auto' }}>
+				<Box>
+					<AppAreaInstalled
+						title='Finanças'
+						subheader='Gráfico indicativo de finanças'
+						currentDateTxt='Diário'
+						chart={chartDataFinancial}
+						loading={isLoadingFinancial.value}
+					/>
+				</Box>
+			</Card>
+		</>
 	);
 };

@@ -24,13 +24,13 @@ export const httpStatusRepository: IStatusRepository = {
 			};
 		}
 	},
-	studentAttendance: async (): Promise<
+	studentAttendance: async (userId?: string ): Promise<
 		IResponse<IStatusStudentAttendanceEntity>
 	> => {
 		try {
 			const response = await apiInstance.get<
 				IResponse<IStatusStudentAttendanceEntity>
-			>('/status/student-attendance');
+			>(userId && userId !== null ? `/status/student-attendance?user_id=${userId}` : '/status/student-attendance');
 			return response.data;
 		} catch (error: any) {
 			return {

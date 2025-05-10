@@ -3,7 +3,7 @@ import { enqueueSnackbar } from 'notistack';
 import { IGraphProps } from '../../components/graph/interfaces';
 import { useBoolean } from '../useBoolean';
 
-export const useFrequencyChart = (name: string, fetch: any, column: string) => {
+export const useFrequencyChart = (name: string, fetch: any, column: string, userId?: string | null) => {
 	const [chartData, setChartData] = useState<IGraphProps['chart']>({
 		categories: [],
 		series: [],
@@ -15,7 +15,7 @@ export const useFrequencyChart = (name: string, fetch: any, column: string) => {
 		try {
 			isLoading.onTrue();
 
-			const response = (await fetch()).data;
+			const response = (await fetch(userId)).data;
 
 			const categories = response?.categories;
 			const series = [
